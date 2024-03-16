@@ -1,0 +1,39 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: alertmanager-config
+  namespace: monitoring
+data:
+  config.yml: |-
+    global:
+    templates:
+    - '/etc/alertmanager/*.tmpl'
+    route:
+      receiver: alert-emailer-1 # Fallback Receiver if no routes are matched
+      group_by: ['warning', 'critical', 'slack']
+      routes:
+      - receiver: alert-emailer-1
+        matchers:
+        - severity="warning"
+      - receiver: alert-emailer-2
+        matchers:
+        - severity="critical"
+        
+    receivers:
+    - name: alert-emailer-1
+      email_configs:
+      - to: ptisma212@gmail.com
+        from: ptisma212@gmail.com
+        smarthost: smtp.gmail.com:587
+        auth_username: ptisma212@gmail.com
+        auth_identity: ptisma212@gmail.com
+        auth_password: ""
+    - name: alert-emailer-2
+      email_configs:
+      - to: gulas212@hotmail.com
+        from: ptisma212@gmail.com
+        smarthost: smtp.gmail.com:587
+        auth_username: ptisma212@gmail.com
+        auth_identity: ptisma212@gmail.com
+        auth_password: ""
+  

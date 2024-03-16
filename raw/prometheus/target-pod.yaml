@@ -1,0 +1,53 @@
+# This one doesn't have the /metrics endpoint which Prometheus uses by default so it will appear down
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: example-deploy-1
+  namespace: monitoring
+  labels:
+    app: example
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: example
+  template:
+    metadata:
+      labels:
+        app: example
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '8080' # Assuming your pod exposes metrics on port 8080
+    spec:
+      containers:
+      - name: example-container
+        image: nginx
+        ports:
+        - containerPort: 8080 # Assuming your pod exposes metrics on port 8080
+# This one has
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: example-deploy-2
+  namespace: monitoring
+  labels:
+    app: sample-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sample-app
+  template:
+    metadata:
+      labels:
+        app: sample-app
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '8080' # Assuming your pod exposes metrics on port 8080
+    spec:
+      containers:
+      - name: sample-app-container
+        image: ptisma/node-prometheus-sample-app:2
+        ports:
+        - containerPort: 8080 # Assuming your pod exposes metrics on port 8080

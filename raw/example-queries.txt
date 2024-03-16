@@ -1,0 +1,17 @@
+Some of the example PromQL queries.
+
+Count number of nodes:
+count(kube_node_info)
+
+Count number of pods:
+count(kube_pod_info)
+
+List all deployments in namespace monitoring which are in status Available:
+kube_deployment_status_condition{condition="Available", status="true", namespace="monitoring"}
+
+List all the deployments in namespace monitoring that have failed during an upgrade
+kube_deployment_status_condition{condition="Progressing", status="False", namespace="monitoring"}
+
+List pods in the monitoring namespace that have been in the state Failed or Pending for longer than 5 minutes:
+
+
